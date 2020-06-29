@@ -65,7 +65,7 @@ app.get('/messages', (req, res) => {
     console.log('Um usuário está conectado.')
   })
   
-  mongoose.connect(dbUrl ,{ useNewUrlParser: true } ,(err) => {
+  mongoose.connect(dbUrl ,{ useUnifiedTopology: true, useNewUrlParser: true, useCreateIndex: true } ,(err) => {
     console.log('Banco de dados Mongodb conectado com sucesso.',err);
   })
   
