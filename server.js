@@ -16,7 +16,7 @@ var Message = mongoose.model('Message',{
 
 
 //MONGODB COM MANGOOSE
-var dbUrl = 'mongodb+srv://bancoteste:12345@simple-chat-1oh7o.mongodb.net/<dbname>?retryWrites=true&w=majority';
+var dbUrl = 'mongodb+srv://teste:teste@cluster0simple-chat.1oh7o.mongodb.net/<dbname>?retryWrites=true&w=majority';
 
 //BUSCANDO TODAS MENSAGENS NO BANCO DE DADOS
 app.get('/messages', (req, res) => {
@@ -65,13 +65,10 @@ app.get('/messages', (req, res) => {
     console.log('Um usuário está conectado.')
   })
   
-  mongoose.connect(dbUrl ,{useMongoClient : true} ,(err) => {
+  mongoose.connect(dbUrl ,{ useNewUrlParser: true } ,(err) => {
     console.log('Banco de dados Mongodb conectado com sucesso.',err);
   })
   
   var server = http.listen(3000, () => {
     console.log('Servidor rodando na porta: ', server.address().port);
   });
-
-
-//nodemon ./server.js
