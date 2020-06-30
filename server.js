@@ -14,57 +14,61 @@ var Message = mongoose.model('Message',{
   message : String
 })
 
-var dbUrl = 'mongodb://amkurian:amkurian1@ds257981.mlab.com:57981/simple-chat'
 
+//MONGODB COM MANGOOSE
+var dbUrl = 'mongodb+srv://teste:teste@cluster0simple-chat.1oh7o.mongodb.net/<dbname>?retryWrites=true&w=majority';
+
+//BUSCANDO TODAS MENSAGENS NO BANCO DE DADOS
 app.get('/messages', (req, res) => {
-  Message.find({},(err, messages)=> {
-    res.send(messages);
+    Message.find({},(err, messages)=> {
+      res.send(messages);
+    })
   })
-})
+  
 
-
-app.get('/messages/:user', (req, res) => {
-  var user = req.params.user
-  Message.find({name: user},(err, messages)=> {
-    res.send(messages);
+  //publicará novas mensagens criadas pelo usuário no banco de dados
+  app.get('/messages/:user', (req, res) => {
+    var user = req.params.user
+    Message.find({name: user},(err, messages)=> {
+      res.send(messages);
+    })
   })
-})
-
-
-app.post('/messages', async (req, res) => {
-  try{
-    var message = new Message(req.body);
-
-    var savedMessage = await message.save()
-      console.log('saved');
-
-    var censored = await Message.findOne({message:'badword'});
-      if(censored)
-        await Message.remove({_id: censored.id})
-      else
-        io.emit('message', req.body);
-      res.sendStatus(200);
-  }
-  catch (error){
-    res.sendStatus(500);
-    return console.log('error',error);
-  }
-  finally{
-    console.log('Message Posted')
-  }
-
-})
-
-
-
-io.on('connection', () =>{
-  console.log('a user is connected')
-})
-
-mongoose.connect(dbUrl ,{ useNewUrlParser: true },(err) => {
-  console.log('mongodb connected',err);
-})
-
-var server = http.listen(4000, () => {
-  console.log('server is running on port', server.address().port);
-});
+  
+  
+  app.post('/messages', async (req, res) => {
+    try{
+      var message = new Message(req.body);
+  
+      var savedMessage = await message.save()
+        console.log('Salvo');
+  
+      var censored = await Message.findOne({message:'badword'});
+        if(censored)
+          await Message.remove({_id: censored.id})
+        else
+          io.emit('message', req.body);
+        res.sendStatus(200);
+    }
+    catch (error){
+      res.sendStatus(500);
+      return console.log('error',error);
+    }
+    finally{
+      console.log('Mensagem postada.')
+    }
+  
+  })
+  
+  
+  
+  io.on('connection', () =>{
+    console.log('Um usuário está conectado.')
+  })
+  
+  mongoose.connect(dbUrl ,{ useUnifiedTopology: true, useNewUrlParser: true, useCreateIndex: true } ,(err) => {
+    console.log('Banco de dados Mongodb conectado com sucesso.',err);
+  })
+  
+  var server = http.listen(3000, () => {
+    console.log('Servidor rodando na porta: ', server.address().port);
+  });

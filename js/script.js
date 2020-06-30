@@ -25,24 +25,25 @@ function getMessages(){
 }
 
 function sendMessage(message){
-  $.post('http://localhost:3000/messages', message)
   
   inputName = document.querySelector('#name');
   inputName2 = document.querySelector('#message');
   var divAlert = document.querySelector('#alerta');
 
-  if((document.querySelector('#name').value == null || document.querySelector('#name').value.trim() == '') || 
-  (document.querySelector('#message').value == null || document.querySelector('#message').value.trim() == '')){
+  if(((document.querySelector('#name').value == null || document.querySelector('#name').value.trim() == '') || 
+  (document.querySelector('#message').value == null || document.querySelector('#message').value.trim() == '')) || (
+  (document.querySelector('#name').value == null || document.querySelector('#name').value.trim() == '') && 
+  (document.querySelector('#message').value == null || document.querySelector('#message').value.trim() == ''))){
     divAlert.innerHTML = '<br> <p style="color:red">Preencha todos os campos!</p>';
   } else {
-
+  $.post('http://localhost:3000/messages', message);
   divAlert.innerHTML = '<br> Mensagem enviada com sucesso!';
-
+  clearInput(); 
   var divHour = document.querySelector('#hora');
   now = new Date
   divHour.innerHTML = `${now.getHours()}:${now.getMinutes()}`;
   }
-  clearInput();  
+   
   
 }
 
